@@ -18,7 +18,9 @@ export function generateWhereClause(
     if (typeof value === 'number') return value
   }
 
-  if (['=', '!='].includes(operator) && args.length === 2) {
+  const isEquality = ['=', '!='].includes(operator)
+
+  if (isEquality && args.length === 2) {
     const [x, y] = args
 
     // Test for null values
@@ -26,5 +28,13 @@ export function generateWhereClause(
     if (x === null) return `${arg(y)} IS NULL`
 
     return `${arg(x)} ${operator} ${arg(y)}`
+  }
+
+  if (isEquality && args.length > 2) {
+    const op = operator === '!=' ? 'NOT IN' : 'IN'
+    const [first, ...rest] = args
+    const sets = rest.map(arg).join(', ')
+
+    return `${arg(first)} ${op} (${sets})`
   }
 }

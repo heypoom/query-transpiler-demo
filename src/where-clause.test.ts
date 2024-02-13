@@ -8,13 +8,13 @@ const FIELDS = {1: 'id', 2: 'name', 3: 'date_joined', 4: 'age'}
 const where = (clause: WhereClause) =>
   generateWhereClause(clause, FIELDS, 'postgres')
 
-describe('where clause generation', () => {
-  it('supports testing for NULL with "=" operator', () => {
+describe('equality checks in where clauses', () => {
+  it('supports checking for NULL with "=" operator', () => {
     expect(where(['=', ['field', 3], null])).toBe('date_joined IS NULL')
     expect(where(['=', null, ['field', 4]])).toBe('age IS NULL')
   })
 
-  it('supports equality tests', () => {
+  it('supports equality checks', () => {
     expect(where(['=', ['field', 4], 50])).toBe('age = 50')
     expect(where(['=', ['field', 2], 'Rainicorn'])).toBe('name = "Rainicorn"')
 
@@ -22,9 +22,14 @@ describe('where clause generation', () => {
     expect(where(['=', 'Baba', ['field', 2]])).toBe('"Baba" = name')
   })
 
-  it('supports inequality tests', () => {
+  it('supports inequality checks', () => {
     expect(where(['!=', ['field', 4], 50])).toBe('age != 50')
     expect(where(['!=', ['field', 2], 'Rainicorn'])).toBe('name != "Rainicorn"')
     expect(where(['!=', 'Baba', ['field', 2]])).toBe('"Baba" != name')
+  })
+
+  it('supports IN and NOT IN operators', () => {
+    expect(where(['=', ['field', 2], 'fo', 'ba'])).toBe('name IN ("fo", "ba")')
+    expect(where(['!=', ['field', 4], 20, 30])).toBe('age NOT IN (20, 30)')
   })
 })
