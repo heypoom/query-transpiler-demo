@@ -18,13 +18,13 @@ export function generateSql(
     validateMacroMap(options.macros)
   }
 
-  let base = 'SELECT'
+  let sql = 'SELECT'
 
   if (dialect === 'sqlserver' && query.limit !== undefined) {
-    base += ` TOP ${query.limit}`
+    sql += ` TOP ${query.limit}`
   }
 
-  base += ' * FROM data'
+  sql += ' * FROM data'
 
   if (query.where !== undefined) {
     const where = optimizeFilter(query.where)
@@ -35,12 +35,12 @@ export function generateSql(
       ...options,
     })
 
-    base += ` WHERE ${clause}`
+    sql += ` WHERE ${clause}`
   }
 
   if (dialect !== 'sqlserver' && query.limit !== undefined) {
-    base += ` LIMIT ${query.limit}`
+    sql += ` LIMIT ${query.limit}`
   }
 
-  return base
+  return sql
 }
