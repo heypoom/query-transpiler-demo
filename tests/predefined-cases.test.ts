@@ -40,4 +40,24 @@ test('pre-defined test cases', () => {
   ).toBe(
     `SELECT * FROM data WHERE date_joined IS NOT NULL AND (age > 25 OR name = 'Jerry')`
   )
+
+  expect(
+    generateSql('postgres', fields, {where: ['=', ['field', 3], 25, 26, 27]})
+  ).toBe('SELECT * FROM data WHERE date_joined IN (25, 26, 27)')
+
+  expect(
+    generateSql('postgres', fields, {where: ['=', ['field', 2], 'cam']})
+  ).toBe(`SELECT * FROM data WHERE name = 'cam'`)
+
+  expect(
+    generateSql('mysql', fields, {where: ['=', ['field', 2], 'cam'], limit: 10})
+  ).toBe(`SELECT * FROM data WHERE name = 'cam' LIMIT 10`)
+
+  expect(generateSql('postgres', fields, {limit: 20})).toBe(
+    'SELECT * FROM data LIMIT 20'
+  )
+
+  expect(generateSql('sqlserver', fields, {limit: 20})).toBe(
+    'SELECT TOP 20 * FROM data'
+  )
 })

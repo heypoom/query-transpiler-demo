@@ -50,8 +50,12 @@ export function generateWhereClause(
     const [left, right] = args
 
     // Test for null values
-    const nullCheck = (value: any) =>
-      operator === '!=' ? `${arg(value)} IS NOT NULL` : `${arg(value)} IS NULL`
+    // biome-ignore lint: to add proper types for fields
+    const nullCheck = (value: any) => {
+      const clause = `${arg(value)} IS`
+
+      return operator === '=' ? `${clause} NULL` : `${clause} NOT NULL`
+    }
 
     if (right === null) return nullCheck(left)
     if (left === null) return nullCheck(right)
