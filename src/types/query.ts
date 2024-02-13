@@ -1,8 +1,6 @@
 import {Filter} from './filter'
 
 export type SqlFields = Record<number, string>
-
-// TODO: make this extensible via types merging
 export type Dialect = 'sqlserver' | 'postgres' | 'mysql'
 
 export type WhereOperator =
@@ -29,7 +27,6 @@ export type FilterValue =
 
 export type FilterExpression = [WhereOperator, ...FilterValue[]]
 
-// TODO: type this properly - get rid of `any`
 export type WhereFilter = FilterValue | FilterExpression
 
 const fx = (w: WhereFilter) => w
