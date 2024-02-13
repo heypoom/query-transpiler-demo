@@ -6,17 +6,7 @@ export function generateWhereClause(
   dialect: Dialect
 ) {
   const [operator, ...args] = input
-
-  const arg = (value: ['field', number] | number | string) => {
-    if (Array.isArray(value)) {
-      if (value[0] === 'field') return fields[value[1]]
-    }
-
-    // TODO: escape string in SQL
-    if (typeof value === 'string') return `"${value}"`
-
-    if (typeof value === 'number') return value
-  }
+  const arg = argumentResolver(fields)
 
   const isEquality = ['=', '!='].includes(operator)
 
@@ -38,3 +28,15 @@ export function generateWhereClause(
     return `${arg(first)} ${op} (${sets})`
   }
 }
+
+const argumentResolver =
+  (fields: SqlFields) => (value: ['field', number] | number | string) => {
+    if (Array.isArray(value)) {
+      if (value[0] === 'field') return fields[value[1]]
+    }
+
+    // TODO: escape string in SQL
+    if (typeof value === 'string') return `"${value}"`
+
+    if (typeof value === 'number') return value
+  }
