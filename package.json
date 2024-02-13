@@ -1,0 +1,18 @@
+{
+  "name": "query-transpiler",
+  "version": "1.0.0",
+  "description": "Transpiles a structured expression into SQL query",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "Phoomparin Mano <poom@poom.dev>",
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "esno": "^4.0.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  }
+}
