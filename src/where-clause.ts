@@ -6,6 +6,7 @@ export function generateWhereClause(
   dialect: Dialect
 ) {
   const [operator, ...args] = input
+
   const arg = argumentResolver(fields)
 
   const isEquality = ['=', '!='].includes(operator)
@@ -27,6 +28,10 @@ export function generateWhereClause(
 
     return `${arg(first)} ${op} (${sets})`
   }
+
+  const [first] = args
+  if (operator === 'is-empty') return `${arg(first)} IS NULL`
+  if (operator === 'not-empty') return `${arg(first)} IS NOT NULL`
 }
 
 const argumentResolver =

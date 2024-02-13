@@ -30,6 +30,12 @@ describe('equality checks in where clauses', () => {
 
   it('supports IN and NOT IN operators', () => {
     expect(where(['=', ['field', 2], 'fo', 'ba'])).toBe('name IN ("fo", "ba")')
+    expect(where(['=', ['field', 4], 5, 6, 7, 8])).toBe('age IN (5, 6, 7, 8)')
     expect(where(['!=', ['field', 4], 20, 30])).toBe('age NOT IN (20, 30)')
+  })
+
+  it('supports empty operator', () => {
+    expect(where(['is-empty', ['field', 4]])).toBe('age IS NULL')
+    expect(where(['not-empty', ['field', 1]])).toBe('id IS NOT NULL')
   })
 })
