@@ -6,7 +6,7 @@ import {ArgValue} from '../argument'
 type FilterArgs = any
 
 export interface FilterContext {
-  operator: string
+  operator: WhereOperator
   depth: number
   args: FilterArgs[]
 
