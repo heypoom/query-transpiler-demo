@@ -16,9 +16,9 @@ export type Dialect = 'sqlserver' | 'postgres' | 'mysql'
 
 // TODO: type this properly - get rid of `any`
 // biome-ignore lint: to type properly
-export type WhereClause = [WhereOperator, ...any]
+export type WhereFilter = [WhereOperator, ...any]
 
 export type QueryOptions = {
   limit?: number
-  where?: WhereClause
+  where?: WhereFilter
 }

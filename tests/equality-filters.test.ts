@@ -1,14 +1,14 @@
 import {describe, it, expect} from 'vitest'
 
-import {generateWhereClause} from './where-clause'
-import {WhereClause} from './types/query'
+import {generateWhereClause} from '../src/where-clause'
+import {WhereFilter} from '../src/types/query'
 
 const FIELDS = {1: 'id', 2: 'name', 3: 'date_joined', 4: 'age'}
 
-const where = (clause: WhereClause) =>
+const where = (clause: WhereFilter) =>
   generateWhereClause(clause, FIELDS, 'postgres')
 
-describe('equality checks in where clauses', () => {
+describe('equality filters in where clauses', () => {
   it('supports checking for NULL with "=" operator', () => {
     expect(where(['=', ['field', 3], null])).toBe('date_joined IS NULL')
     expect(where(['=', null, ['field', 4]])).toBe('age IS NULL')
