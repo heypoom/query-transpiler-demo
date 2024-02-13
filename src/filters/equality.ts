@@ -29,5 +29,7 @@ export const EqualityFilter: Filter = {
 
       return `${arg(first)} ${op} (${sets})`
     }
+
+    throw new Error('invalid argument count for equality filter')
   },
 }

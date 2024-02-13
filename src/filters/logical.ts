@@ -10,8 +10,6 @@ export const LogicalFilter: Filter = {
       return `NOT ${generate(args[0])}`
     }
 
-    if (args.length < 0 || args.length > 2) throw new Error('invalid argument')
-
     if (operator === 'and' && args.length === 1) return generate(args[0])
 
     if (args.length === 2) {
@@ -22,5 +20,7 @@ export const LogicalFilter: Filter = {
 
       return depth > 0 ? `(${out})` : out
     }
+
+    throw new Error('invalid argument for logical filter')
   },
 }

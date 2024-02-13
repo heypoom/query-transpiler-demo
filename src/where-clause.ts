@@ -19,6 +19,7 @@ export function generateWhereClause(
   const [operator, ...args] = inputFilter
   const {depth = 0} = whereContext
 
+  // Users can provide custom filters in addition to the default ones.
   const filters = [...DEFAULT_FILTERS, ...(whereContext.filters ?? [])]
 
   // Filter context provides information about the query to each filter.

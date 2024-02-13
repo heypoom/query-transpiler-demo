@@ -6,7 +6,7 @@ export const ComparisonFilter: Filter = {
   process(context) {
     const {args, arg, operator} = context
 
-    if (args.length !== 2) throw new Error('comparison must have 2 args')
+    if (args.length !== 2) throw new Error('comparison must have 2 arguments')
 
     const [left, right] = args
 
