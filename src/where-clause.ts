@@ -9,8 +9,14 @@ export function generateWhereClause(
   inputFilter: WhereFilter,
   whereContext: WhereContext
 ): string {
-  const [operator, ...args] = inputFilter
   const {fields, dialect, depth = 0} = whereContext
+  const arg = makeArgumentResolver(fields, dialect)
+
+  if (!Array.isArray(inputFilter)) {
+    if (inputFilter === true) return ''
+  }
+
+  const [operator, ...args] = inputFilter
 
   // Users can provide custom filters in addition to the default ones.
   const filters = [...DEFAULT_FILTERS, ...(whereContext.filters ?? [])]
@@ -21,7 +27,7 @@ export function generateWhereClause(
     args,
     depth,
     macros: whereContext.macros,
-    arg: makeArgumentResolver(fields, dialect),
+    arg,
     generate: (filter) =>
       generateWhereClause(filter, {...whereContext, depth: depth + 1}),
   }

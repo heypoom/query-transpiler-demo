@@ -12,15 +12,11 @@ export const LogicalFilter: Filter = {
 
     if (operator === 'and' && args.length === 1) return generate(args[0])
 
-    if (args.length === 2) {
-      const opKey = operator.toUpperCase()
-      const [left, right] = args
+    const opKey = operator.toUpperCase()
+    const values = args.map(generate)
 
-      const out = `${generate(left)} ${opKey} ${generate(right)}`
+    const out = values.join(` ${opKey} `)
 
-      return depth > 0 ? `(${out})` : out
-    }
-
-    throw new Error('invalid argument for logical filter')
+    return depth > 0 ? `(${out})` : out
   },
 }

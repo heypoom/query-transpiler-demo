@@ -1,4 +1,5 @@
 import {validateMacroMap} from './macro-circular-deps'
+import {optimizeFilter} from './optimizer'
 import {
   Dialect,
   SqlFields,
@@ -26,7 +27,9 @@ export function generateSql(
   base += ' * FROM data'
 
   if (query.where !== undefined) {
-    const clause = generateWhereClause(query.where, {
+    const where = optimizeFilter(query.where)
+
+    const clause = generateWhereClause(where, {
       dialect,
       fields,
       ...options,
