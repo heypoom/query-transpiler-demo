@@ -1,12 +1,6 @@
 import {describe, it, expect} from 'vitest'
 
-import {generateWhereClause} from '../src/where-clause'
-import {WhereFilter} from '../src/types/query'
-
-const FIELDS = {1: 'id', 2: 'name', 3: 'date_joined', 4: 'age'}
-
-const where = (filter: WhereFilter) =>
-  generateWhereClause(filter, FIELDS, 'postgres')
+import {where} from './helpers'
 
 describe('equality filters in where clauses', () => {
   it('supports checking for NULL with "=" operator', () => {

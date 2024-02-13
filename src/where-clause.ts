@@ -1,5 +1,5 @@
-import {a} from 'vitest/dist/suite-ghspeorC'
 import {Dialect, SqlFields, WhereFilter} from './types/query'
+import {escapeString} from './escape-string'
 
 const logicalMap: Record<string, string> = {
   and: 'AND',
@@ -13,7 +13,7 @@ export function generateWhereClause(
 ): string {
   const [operator, ...args] = inputFilter
 
-  const arg = argumentResolver(fields)
+  const arg = argumentResolver(fields, dialect)
 
   const generate = (filter: WhereFilter) =>
     generateWhereClause(filter, fields, dialect)
@@ -68,13 +68,14 @@ export function generateWhereClause(
 }
 
 const argumentResolver =
-  (fields: SqlFields) => (value: ['field', number] | number | string) => {
+  (fields: SqlFields, dialect: Dialect) =>
+  (value: ['field', number] | number | string) => {
     if (Array.isArray(value)) {
       if (value[0] === 'field') return fields[value[1]]
     }
 
     // TODO: escape string in SQL
-    if (typeof value === 'string') return `'${value}'`
+    if (typeof value === 'string') return `'${escapeString(value, dialect)}'`
 
     if (typeof value === 'number') return value
   }
