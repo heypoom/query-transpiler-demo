@@ -1,4 +1,4 @@
-import {Dialect} from './types/query'
+import {Dialect} from '../types/query'
 
 const isQuoteNeeded = (name: string) => /[^a-zA-Z0-9_]/.test(name)
 

@@ -1,4 +1,4 @@
-import {Dialect} from './types/query'
+import {Dialect} from '../types/query'
 
 const mysqlEscapeChars: Record<string, string> = {
   '\0': '\\0',

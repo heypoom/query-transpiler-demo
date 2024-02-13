@@ -1,5 +1,5 @@
-import {escapeString} from './escape-string'
-import {quoteFieldName} from './quote-field-name'
+import {escapeString} from './strings/escape-string'
+import {quoteFieldName} from './strings/quote-field-name'
 import {Dialect, SqlFields} from './types/query'
 
 export type ArgValue = ['field', number] | number | string
