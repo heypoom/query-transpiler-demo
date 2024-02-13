@@ -1,5 +1,6 @@
 import {Dialect, SqlFields, WhereFilter} from './types/query'
 import {escapeString} from './escape-string'
+import {quoteFieldName} from './quote-field-name'
 
 const logicalMap: Record<string, string> = {
   and: 'AND',
@@ -71,7 +72,7 @@ const argumentResolver =
   (fields: SqlFields, dialect: Dialect) =>
   (value: ['field', number] | number | string) => {
     if (Array.isArray(value)) {
-      if (value[0] === 'field') return fields[value[1]]
+      if (value[0] === 'field') return quoteFieldName(fields[value[1]], dialect)
     }
 
     // TODO: escape string in SQL
