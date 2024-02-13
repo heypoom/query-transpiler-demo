@@ -1,10 +1,14 @@
 import {Filter} from '../types/filter'
 
 export const LogicalFilter: Filter = {
-  match: ['and', 'or'],
+  match: ['and', 'or', 'not'],
 
   process(context) {
     const {operator, args, generate, depth = 0} = context
+
+    if (operator === 'not' && args.length === 1) {
+      return `NOT ${generate(args[0])}`
+    }
 
     if (args.length < 0 || args.length > 2) throw new Error('invalid argument')
 
