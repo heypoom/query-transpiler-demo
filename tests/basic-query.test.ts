@@ -16,4 +16,8 @@ test('generate limit clauses when present', () => {
   expect(generateSql('postgres', fields, {limit: 10})).toBe(
     `SELECT * FROM 'data' LIMIT 10`
   )
+
+  expect(generateSql('sqlserver', fields, {limit: 10})).toBe(
+    `SELECT TOP 10 * FROM 'data'`
+  )
 })

@@ -14,7 +14,7 @@ export function generateSql(
   base += ` * FROM 'data'`
 
   if (dialect !== 'sqlserver' && query.limit !== undefined) {
-    base += ' LIMIT 20'
+    base += ` LIMIT ${query.limit}`
   }
 
   return base
