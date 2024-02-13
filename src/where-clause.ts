@@ -7,30 +7,26 @@ const logicalMap: Record<string, string> = {
 }
 
 export function generateWhereClause(
-  input: WhereFilter,
+  inputFilter: WhereFilter,
   fields: SqlFields,
   dialect: Dialect
 ): string {
-  const [operator, ...args] = input
+  const [operator, ...args] = inputFilter
 
   const arg = argumentResolver(fields)
-  const gen = (filter: WhereFilter) =>
+
+  const generate = (filter: WhereFilter) =>
     generateWhereClause(filter, fields, dialect)
 
   const isLogical = ['and', 'or'].includes(operator)
 
-  if (operator === 'and' && args.length === 1) {
-    return generateWhereClause(args[0], fields, dialect)
-  }
+  if (operator === 'and' && args.length === 1) return generate(args[0])
 
   if (isLogical && args.length === 2) {
-    const [leftClause, rightClause] = args
     const opKey = logicalMap[operator]
+    const [leftFilter, rightFilter] = args
 
-    const left = generateWhereClause(leftClause, fields, dialect)
-    const right = generateWhereClause(rightClause, fields, dialect)
-
-    return `(${left}) ${opKey} (${right})`
+    return `(${generate(leftFilter)}) ${opKey} (${generate(rightFilter)})`
   }
 
   const isEquality = ['=', '!='].includes(operator)

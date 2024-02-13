@@ -5,8 +5,8 @@ import {WhereFilter} from '../src/types/query'
 
 const FIELDS = {1: 'id', 2: 'name', 3: 'date_joined', 4: 'age'}
 
-const where = (clause: WhereFilter) =>
-  generateWhereClause(clause, FIELDS, 'postgres')
+const where = (filter: WhereFilter) =>
+  generateWhereClause(filter, FIELDS, 'postgres')
 
 describe('equality filters in where clauses', () => {
   it('supports checking for NULL with "=" operator', () => {
