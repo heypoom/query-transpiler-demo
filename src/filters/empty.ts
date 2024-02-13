@@ -7,15 +7,7 @@ export const EmptyFilter: Filter = {
     const {operator, arg} = context
     const [first] = context.args
 
-    const clause = `${arg(first)} IS`
-
-    switch (operator) {
-      case 'not-empty':
-        return `${clause} NOT NULL`
-      case 'is-empty':
-        return `${clause} NULL`
-    }
-
-    throw new Error('invalid operator for empty filter')
+    if (operator === 'is-empty') return `${arg(first)} IS NULL`
+    if (operator === 'not-empty') return `${arg(first)} IS NOT NULL`
   },
 }
