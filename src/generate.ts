@@ -1,10 +1,16 @@
-import {Dialect, SqlFields, QueryOptions} from './types/query'
+import {
+  Dialect,
+  SqlFields,
+  QueryOptions,
+  GenerateSqlOptions,
+} from './types/query'
 import {generateWhereClause} from './where-clause'
 
 export function generateSql(
   dialect: Dialect,
   fields: SqlFields,
-  query: QueryOptions
+  query: QueryOptions,
+  options: GenerateSqlOptions = {}
 ) {
   let base = 'SELECT'
 
@@ -15,7 +21,13 @@ export function generateSql(
   base += ' * FROM data'
 
   if (query.where !== undefined) {
-    base += ` WHERE ${generateWhereClause(query.where, fields, dialect)}`
+    const clause = generateWhereClause(query.where, {
+      dialect,
+      fields,
+      ...options,
+    })
+
+    base += ` WHERE ${clause}`
   }
 
   if (dialect !== 'sqlserver' && query.limit !== undefined) {

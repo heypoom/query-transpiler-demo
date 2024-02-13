@@ -1,23 +1,16 @@
-import {Dialect, SqlFields, WhereFilter} from './types/query'
+import {WhereContext, WhereFilter} from './types/query'
 
 import {makeArgumentResolver} from './argument'
-import {Filter, FilterContext} from './types/filter'
+import {FilterContext} from './types/filter'
 
 import {DEFAULT_FILTERS} from './filters'
 
-interface WhereContext {
-  depth?: number
-  filters?: Filter[]
-}
-
 export function generateWhereClause(
   inputFilter: WhereFilter,
-  fields: SqlFields,
-  dialect: Dialect,
-  whereContext: WhereContext = {}
+  whereContext: WhereContext
 ): string {
   const [operator, ...args] = inputFilter
-  const {depth = 0} = whereContext
+  const {fields, dialect, depth = 0} = whereContext
 
   // Users can provide custom filters in addition to the default ones.
   const filters = [...DEFAULT_FILTERS, ...(whereContext.filters ?? [])]
@@ -27,10 +20,10 @@ export function generateWhereClause(
     operator,
     args,
     depth,
+    macros: whereContext.macros,
     arg: makeArgumentResolver(fields, dialect),
-
     generate: (filter) =>
-      generateWhereClause(filter, fields, dialect, {depth: depth + 1}),
+      generateWhereClause(filter, {...whereContext, depth: depth + 1}),
   }
 
   for (const filter of filters) {

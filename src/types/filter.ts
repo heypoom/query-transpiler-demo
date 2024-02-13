@@ -1,4 +1,4 @@
-import {WhereFilter, WhereOperator} from './query'
+import {MacroMap, WhereFilter, WhereOperator} from './query'
 
 import {ArgValue} from '../argument'
 
@@ -9,6 +9,7 @@ export interface FilterContext {
   operator: string
   depth: number
   args: FilterArgs[]
+  macros?: MacroMap
 
   /** Produces the SQL argument's values */
   arg(value: ArgValue): string | number | undefined
