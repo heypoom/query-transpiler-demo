@@ -17,6 +17,14 @@ describe('where clause generation', () => {
   it('supports equality tests', () => {
     expect(where(['=', ['field', 4], 50])).toBe('age = 50')
     expect(where(['=', ['field', 2], 'Rainicorn'])).toBe('name = "Rainicorn"')
+
+    // SQL allows expressions on the either side of the comparison operator.
     expect(where(['=', 'Baba', ['field', 2]])).toBe('"Baba" = name')
+  })
+
+  it('supports inequality tests', () => {
+    expect(where(['!=', ['field', 4], 50])).toBe('age != 50')
+    expect(where(['!=', ['field', 2], 'Rainicorn'])).toBe('name != "Rainicorn"')
+    expect(where(['!=', 'Baba', ['field', 2]])).toBe('"Baba" != name')
   })
 })

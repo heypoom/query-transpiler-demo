@@ -18,13 +18,13 @@ export function generateWhereClause(
     if (typeof value === 'number') return value
   }
 
-  if (operator === '=' && args.length === 2) {
+  if (['=', '!='].includes(operator) && args.length === 2) {
     const [x, y] = args
 
     // Test for null values
     if (y === null) return `${arg(x)} IS NULL`
     if (x === null) return `${arg(y)} IS NULL`
 
-    return `${arg(x)} = ${arg(y)}`
+    return `${arg(x)} ${operator} ${arg(y)}`
   }
 }
