@@ -1,6 +1,7 @@
 import {Dialect, SqlFields, WhereFilter} from './types/query'
 import {escapeString} from './escape-string'
 import {quoteFieldName} from './quote-field-name'
+import {LogicalFilter} from './filters/logical'
 
 interface WhereContext {
   depth?: number
@@ -20,17 +21,9 @@ export function generateWhereClause(
   const generate = (filter: WhereFilter) =>
     generateWhereClause(filter, fields, dialect, {depth: depth + 1})
 
-  const isLogical = ['and', 'or'].includes(operator)
-
-  if (operator === 'and' && args.length === 1) return generate(args[0])
-
-  if (isLogical && args.length === 2) {
-    const opKey = operator.toUpperCase()
-    const [left, right] = args
-
-    const out = `${generate(left)} ${opKey} ${generate(right)}`
-
-    return depth > 0 ? `(${out})` : out
+  if (LogicalFilter.match.includes(operator)) {
+    const result = LogicalFilter.process({operator, args, generate, depth})
+    if (result) return result
   }
 
   if (operator === 'not' && args.length === 1) {

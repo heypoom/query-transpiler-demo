@@ -1,6 +1,6 @@
 export type SqlFields = Record<number, string>
 
-type WhereOperator =
+export type WhereOperator =
   | 'and'
   | 'or'
   | 'not'
