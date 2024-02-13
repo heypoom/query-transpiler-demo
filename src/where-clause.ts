@@ -29,7 +29,7 @@ export function generateWhereClause(
   for (const filter of filters) {
     if (filter.match.includes(operator)) {
       const output = filter.process(filterContext)
-      if (output) return output
+      if (output !== undefined && output !== null) return output
     }
   }
 

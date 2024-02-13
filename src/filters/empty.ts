@@ -7,7 +7,12 @@ export const EmptyFilter: Filter = {
     const {operator, arg} = context
     const [first] = context.args
 
-    if (operator === 'is-empty') return `${arg(first)} IS NULL`
+    const isEmpty = operator === 'is-empty'
+
+    // optimize out logical checks
+    if (first === null) return isEmpty ? '' : 'FALSE'
+
+    if (isEmpty) return `${arg(first)} IS NULL`
     if (operator === 'not-empty') return `${arg(first)} IS NOT NULL`
   },
 }

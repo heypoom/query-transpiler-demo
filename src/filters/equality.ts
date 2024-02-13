@@ -7,14 +7,18 @@ export const EqualityFilter: Filter = {
   process(context) {
     const {operator, args, arg} = context
 
+    const isEqual = operator === '='
+
     const nullCheck = (value: ArgValue) => {
       const clause = `${arg(value)} IS`
 
-      return operator === '=' ? `${clause} NULL` : `${clause} NOT NULL`
+      return isEqual ? `${clause} NULL` : `${clause} NOT NULL`
     }
 
     if (args.length === 2) {
       const [left, right] = args
+
+      if (isEqual && left === null && right === null) return ''
 
       if (right === null) return nullCheck(left)
       if (left === null) return nullCheck(right)

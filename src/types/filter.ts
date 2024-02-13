@@ -12,7 +12,7 @@ export interface FilterContext {
   macros?: MacroMap
 
   /** Produces the SQL argument's values */
-  arg(value: ArgValue): string | number | undefined
+  arg(value: ArgValue): string | number
 
   /** Generates the SQL clauses */
   generate(filter: WhereFilter): string
