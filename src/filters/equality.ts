@@ -1,5 +1,5 @@
-import {ArgValue} from '../argument'
 import {Filter} from '../types/filter'
+import {FilterValue} from '../types/query'
 
 export const EqualityFilter: Filter = {
   match: ['=', '!='],
@@ -9,7 +9,7 @@ export const EqualityFilter: Filter = {
 
     const isEqual = operator === '='
 
-    const nullCheck = (value: ArgValue) => {
+    const nullCheck = (value: FilterValue) => {
       const clause = `${arg(value)} IS`
 
       return isEqual ? `${clause} NULL` : `${clause} NOT NULL`

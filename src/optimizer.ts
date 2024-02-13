@@ -1,4 +1,4 @@
-import {WhereFilter} from './types/query'
+import {WhereFilter, WhereOperator} from './types/query'
 
 export function optimizeFilter(filter: WhereFilter): WhereFilter {
   if (!Array.isArray(filter)) return filter
@@ -28,5 +28,5 @@ export function optimizeFilter(filter: WhereFilter): WhereFilter {
     if (inner === 'not') return value
   }
 
-  return [operator, ...operands]
+  return [operator as WhereOperator, ...operands]
 }

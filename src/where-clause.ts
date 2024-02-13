@@ -1,4 +1,9 @@
-import {WhereContext, WhereFilter} from './types/query'
+import {
+  FilterExpression,
+  WhereContext,
+  WhereFilter,
+  WhereOperator,
+} from './types/query'
 
 import {makeArgumentResolver} from './argument'
 import {FilterContext} from './types/filter'
@@ -14,6 +19,8 @@ export function generateWhereClause(
 
   if (!Array.isArray(inputFilter)) {
     if (inputFilter === true) return ''
+
+    throw new Error('input filter must be a valid filter array')
   }
 
   const [operator, ...args] = inputFilter
@@ -24,7 +31,7 @@ export function generateWhereClause(
   // Filter context provides information about the query to each filter.
   const filterContext: FilterContext = {
     operator,
-    args,
+    args: args as FilterExpression[],
     depth,
     macros: whereContext.macros,
     arg,
@@ -33,7 +40,7 @@ export function generateWhereClause(
   }
 
   for (const filter of filters) {
-    if (filter.match.includes(operator)) {
+    if (filter.match.includes(operator as WhereOperator)) {
       const output = filter.process(filterContext)
       if (output !== undefined && output !== null) return output
     }

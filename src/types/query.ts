@@ -2,6 +2,9 @@ import {Filter} from './filter'
 
 export type SqlFields = Record<number, string>
 
+// TODO: make this extensible via types merging
+export type Dialect = 'sqlserver' | 'postgres' | 'mysql'
+
 export type WhereOperator =
   | 'and'
   | 'or'
@@ -14,12 +17,25 @@ export type WhereOperator =
   | 'not-empty'
   | 'macro'
 
-// TODO: make this extensible via types merging
-export type Dialect = 'sqlserver' | 'postgres' | 'mysql'
+export type FieldValue = ['field', number]
+
+export type FilterValue =
+  | string
+  | boolean
+  | number
+  | null
+  | FieldValue
+  | FilterExpression
+
+export type FilterExpression = [WhereOperator, ...FilterValue[]]
 
 // TODO: type this properly - get rid of `any`
-// biome-ignore lint: to type properly
-export type WhereFilter = [WhereOperator, ...any]
+export type WhereFilter = FilterValue | FilterExpression
+
+const fx = (w: WhereFilter) => w
+
+fx(['and', ['!=', ['field', 3], null]])
+fx(['!=', ['field', 3], null])
 
 export type QueryOptions = {
   limit?: number

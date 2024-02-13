@@ -1,18 +1,19 @@
-import {MacroMap, WhereFilter, WhereOperator} from './query'
-
-import {ArgValue} from '../argument'
-
-// biome-ignore lint/suspicious/noExplicitAny: to implement
-type FilterArgs = any
+import {
+  FilterExpression,
+  FilterValue,
+  MacroMap,
+  WhereFilter,
+  WhereOperator,
+} from './query'
 
 export interface FilterContext {
   operator: string
   depth: number
-  args: FilterArgs[]
+  args: FilterExpression[]
   macros?: MacroMap
 
   /** Produces the SQL argument's values */
-  arg(value: ArgValue): string
+  arg(value: FilterValue): string
 
   /** Generates the SQL clauses */
   generate(filter: WhereFilter): string

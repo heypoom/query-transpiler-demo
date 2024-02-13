@@ -4,11 +4,11 @@ function getMacroNames(filter: WhereFilter): string[] {
   if (!Array.isArray(filter)) return []
 
   const [operator, name] = filter
-  if (operator === 'macro') return [name]
+  if (operator === 'macro' && typeof name === 'string') return [name]
 
   return filter.reduce(
     (filters, filter) => filters.concat(getMacroNames(filter)),
-    []
+    [] as string[]
   )
 }
 

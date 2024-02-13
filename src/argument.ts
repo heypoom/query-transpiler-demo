@@ -1,12 +1,10 @@
 import {escapeString} from './strings/escape-string'
 import {quoteFieldName} from './strings/quote-field-name'
-import {Dialect, SqlFields} from './types/query'
-
-export type ArgValue = ['field', number] | number | string | boolean
+import {Dialect, FilterValue, SqlFields} from './types/query'
 
 export const makeArgumentResolver =
   (fields: SqlFields, dialect: Dialect) =>
-  (value: ArgValue): string => {
+  (value: FilterValue): string => {
     if (typeof value === 'number') return value.toString()
     if (typeof value === 'string') return `'${escapeString(value, dialect)}'`
 
