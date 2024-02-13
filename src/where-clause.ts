@@ -24,21 +24,32 @@ export function generateWhereClause(
 
   if (isLogical && args.length === 2) {
     const opKey = logicalMap[operator]
-    const [leftFilter, rightFilter] = args
+    const [left, right] = args
 
-    return `(${generate(leftFilter)}) ${opKey} (${generate(rightFilter)})`
+    return `(${generate(left)}) ${opKey} (${generate(right)})`
+  }
+
+  if (operator === 'not' && args.length === 1) {
+    return `NOT (${generate(args[0])})`
+  }
+
+  const isComparison = ['<', '>'].includes(operator)
+  if (isComparison && args.length === 2) {
+    const [left, right] = args
+
+    return `${arg(left)} ${operator} ${arg(right)}`
   }
 
   const isEquality = ['=', '!='].includes(operator)
 
   if (isEquality && args.length === 2) {
-    const [x, y] = args
+    const [left, right] = args
 
     // Test for null values
-    if (y === null) return `${arg(x)} IS NULL`
-    if (x === null) return `${arg(y)} IS NULL`
+    if (right === null) return `${arg(left)} IS NULL`
+    if (left === null) return `${arg(right)} IS NULL`
 
-    return `${arg(x)} ${operator} ${arg(y)}`
+    return `${arg(left)} ${operator} ${arg(right)}`
   }
 
   if (isEquality && args.length > 2) {
@@ -63,7 +74,7 @@ const argumentResolver =
     }
 
     // TODO: escape string in SQL
-    if (typeof value === 'string') return `"${value}"`
+    if (typeof value === 'string') return `'${value}'`
 
     if (typeof value === 'number') return value
   }

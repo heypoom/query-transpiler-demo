@@ -16,20 +16,20 @@ describe('equality filters in where clauses', () => {
 
   it('supports equality checks', () => {
     expect(where(['=', ['field', 4], 50])).toBe('age = 50')
-    expect(where(['=', ['field', 2], 'Rainicorn'])).toBe('name = "Rainicorn"')
+    expect(where(['=', ['field', 2], 'Rainicorn'])).toBe(`name = 'Rainicorn'`)
 
     // SQL allows expressions on the either side of the comparison operator.
-    expect(where(['=', 'Baba', ['field', 2]])).toBe('"Baba" = name')
+    expect(where(['=', 'Baba', ['field', 2]])).toBe(`'Baba' = name`)
   })
 
   it('supports inequality checks', () => {
     expect(where(['!=', ['field', 4], 50])).toBe('age != 50')
-    expect(where(['!=', ['field', 2], 'Rainicorn'])).toBe('name != "Rainicorn"')
-    expect(where(['!=', 'Baba', ['field', 2]])).toBe('"Baba" != name')
+    expect(where(['!=', ['field', 2], 'Rainicorn'])).toBe(`name != 'Rainicorn'`)
+    expect(where(['!=', 'Baba', ['field', 2]])).toBe(`'Baba' != name`)
   })
 
   it('supports IN and NOT IN operators', () => {
-    expect(where(['=', ['field', 2], 'fo', 'ba'])).toBe('name IN ("fo", "ba")')
+    expect(where(['=', ['field', 2], 'fo', 'ba'])).toBe(`name IN ('fo', 'ba')`)
     expect(where(['=', ['field', 4], 5, 6, 7, 8])).toBe('age IN (5, 6, 7, 8)')
     expect(where(['!=', ['field', 4], 20, 30])).toBe('age NOT IN (20, 30)')
   })
