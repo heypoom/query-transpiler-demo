@@ -1,3 +1,4 @@
+import {validateMacroMap} from './macro-circular-deps'
 import {
   Dialect,
   SqlFields,
@@ -12,6 +13,10 @@ export function generateSql(
   query: QueryOptions,
   options: GenerateSqlOptions = {}
 ) {
+  if (options.macros !== undefined) {
+    validateMacroMap(options.macros)
+  }
+
   let base = 'SELECT'
 
   if (dialect === 'sqlserver' && query.limit !== undefined) {
