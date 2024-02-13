@@ -12,14 +12,14 @@ describe('logical filters in where clauses', () => {
   it('supports logical operators', () => {
     expect(
       where(['and', ['=', ['field', 2], 'Sally'], ['=', ['field', 4], 50]])
-    ).toBe(`(name = 'Sally') AND (age = 50)`)
+    ).toBe(`name = 'Sally' AND age = 50`)
 
     expect(
       where(['or', ['=', ['field', 2], 'Sally'], ['=', ['field', 4], 50]])
-    ).toBe(`(name = 'Sally') OR (age = 50)`)
+    ).toBe(`name = 'Sally' OR age = 50`)
   })
 
   it('supports NOT operator', () => {
-    expect(where(['not', ['>', ['field', 4], 18]])).toBe('NOT (age > 18)')
+    expect(where(['not', ['>', ['field', 4], 18]])).toBe('NOT age > 18')
   })
 })

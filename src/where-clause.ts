@@ -2,36 +2,39 @@ import {Dialect, SqlFields, WhereFilter} from './types/query'
 import {escapeString} from './escape-string'
 import {quoteFieldName} from './quote-field-name'
 
-const logicalMap: Record<string, string> = {
-  and: 'AND',
-  or: 'OR',
+interface WhereContext {
+  depth?: number
 }
 
 export function generateWhereClause(
   inputFilter: WhereFilter,
   fields: SqlFields,
-  dialect: Dialect
+  dialect: Dialect,
+  context: WhereContext = {}
 ): string {
   const [operator, ...args] = inputFilter
+  const {depth = 0} = context ?? {}
 
   const arg = argumentResolver(fields, dialect)
 
   const generate = (filter: WhereFilter) =>
-    generateWhereClause(filter, fields, dialect)
+    generateWhereClause(filter, fields, dialect, {depth: depth + 1})
 
   const isLogical = ['and', 'or'].includes(operator)
 
   if (operator === 'and' && args.length === 1) return generate(args[0])
 
   if (isLogical && args.length === 2) {
-    const opKey = logicalMap[operator]
+    const opKey = operator.toUpperCase()
     const [left, right] = args
 
-    return `(${generate(left)}) ${opKey} (${generate(right)})`
+    const out = `${generate(left)} ${opKey} ${generate(right)}`
+
+    return depth > 0 ? `(${out})` : out
   }
 
   if (operator === 'not' && args.length === 1) {
-    return `NOT (${generate(args[0])})`
+    return `NOT ${generate(args[0])}`
   }
 
   const isComparison = ['<', '>'].includes(operator)
@@ -47,8 +50,11 @@ export function generateWhereClause(
     const [left, right] = args
 
     // Test for null values
-    if (right === null) return `${arg(left)} IS NULL`
-    if (left === null) return `${arg(right)} IS NULL`
+    const nullCheck = (value: any) =>
+      operator === '!=' ? `${arg(value)} IS NOT NULL` : `${arg(value)} IS NULL`
+
+    if (right === null) return nullCheck(left)
+    if (left === null) return nullCheck(right)
 
     return `${arg(left)} ${operator} ${arg(right)}`
   }
